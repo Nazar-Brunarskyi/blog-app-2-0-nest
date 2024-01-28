@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import mongoose from 'mongoose';
 import { User } from '../entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -9,23 +10,34 @@ export class UserService {
     @InjectModel(User.name)
     private userModel: mongoose.Model<User>,
   ) {}
-  // create(createUserDto: CreateUserDto) {
-  //   return 'This action adds a new user';
-  // }
+  async create(createUserDto: CreateUserDto) {
+    const { userName, email, firebaseId } = createUserDto;
 
-  findAll() {
+    const existingUser = await this.userModel.findOne({ userName });
+    if (existingUser) {
+      throw new ConflictException(`User with username '${userName}' already exists`);
+    }
+
     const newUser = new this.userModel({
-      userName: 'nnazar836',
-      firebaseId: 'akncbdsbviasdvbagiusdvb',
-      email: 'nnazar836@gmail.com',
+      userName,
+      firebaseId,
+      email,
     });
 
-    return newUser.save();
+    return await newUser.save();
+  }
+
+  findAll() {
+    return 'findAll';
   }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} user`;
   // }
+
+  findByFirebaseUid(firebaseId: string) {
+    return this.userModel.findOne({ firebaseId });
+  }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;
@@ -34,4 +46,14 @@ export class UserService {
   // remove(id: number) {
   //   return `This action removes a #${id} user`;
   // }
+
+  async checkUserName(userName: string) {
+    const existingUser = await this.userModel.findOne({ userName });
+
+    if (existingUser) {
+      return true;
+    }
+
+    return false;
+  }
 }

@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-// import mongoose from 'mongoose';
+import { IUser } from 'src/common/types/interfaces/user';
 
 @Schema()
-class User {
+class User implements IUser {
   @Prop({ unique: true })
   userName: string;
 
