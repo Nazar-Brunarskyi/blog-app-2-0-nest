@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { FirebaseModule } from './app/firebase/firebase.module';
 import { UserModule } from './app/user/user.module';
 import { StripeModule } from './app/stripe/stripe.module';
+import { SubscriptionModule } from './app/subscription/subscription.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { StripeModule } from './app/stripe/stripe.module';
     FirebaseModule,
     UserModule,
     StripeModule,
+    SubscriptionModule,
   ],
   controllers: [],
   providers: [],

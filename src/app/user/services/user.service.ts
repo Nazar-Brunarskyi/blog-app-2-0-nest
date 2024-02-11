@@ -31,9 +31,9 @@ export class UserService {
     return 'findAll';
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
+  findOne(id: string) {
+    return this.userModel.findById(id);
+  }
 
   findByFirebaseUid(firebaseId: string) {
     return this.userModel.findOne({ firebaseId });

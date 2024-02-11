@@ -1,15 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 import { IUser } from 'src/common/types/interfaces/user';
 
 @Schema()
 class User implements IUser {
+  _id: Types.ObjectId; // or string if you prefer
+
   @Prop({ unique: true })
   userName: string;
 
   @Prop({ required: true, unique: true })
   firebaseId: string;
 
-  @Prop()
+  @Prop({ unique: true })
   email: string;
 }
 
