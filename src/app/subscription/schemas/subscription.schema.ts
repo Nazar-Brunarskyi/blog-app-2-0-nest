@@ -16,9 +16,6 @@ export class Subscription extends Document implements ISubscription {
   @Prop()
   validUntil: Date;
 
-  @Prop({ required: true })
-  isValid: boolean;
-
   @Prop({ required: true, type: Types.ObjectId, ref: 'User' })
   userId: string;
 

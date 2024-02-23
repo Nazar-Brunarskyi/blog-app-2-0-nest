@@ -2,11 +2,10 @@ import { Types } from 'mongoose';
 import { SUBSCRIPTION_TYPE } from '../enums/subscription';
 
 export interface ISubscription {
-  _id: Types.ObjectId; // or string if you prefer
+  _id: Types.ObjectId;
   stripeSubscriptionId: string;
   customerId: string;
   validUntil: Date;
-  isValid: boolean;
   userId: string;
   type: SUBSCRIPTION_TYPE;
 }

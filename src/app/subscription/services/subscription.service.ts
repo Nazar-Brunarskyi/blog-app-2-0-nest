@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Subscription } from '../schemas/subscription.schema';
@@ -22,7 +22,6 @@ export class SubscriptionService {
     const newSubscription = new this.subscriptionModel({
       stripeSubscriptionId: subscriptionId,
       type: type,
-      isValid: false,
       customerId,
       userId: user,
       validUntil: null,
@@ -36,21 +35,20 @@ export class SubscriptionService {
       stripeSubscriptionId: subscriptionId,
     });
 
-    subscription.isValid = true;
     subscription.validUntil = validUntil;
 
     return subscription.save();
   }
-  // findAll() {
-  //   return `This action returns all subscription`;
-  // }
-  // findOne(id: number) {
-  //   return `This action returns a #${id} subscription`;
-  // }
-  // update(id: number, updateSubscriptionDto: UpdateSubscriptionDto) {
-  //   return `This action updates a #${id} subscription`;
-  // }
-  // remove(id: number) {
-  //   return `This action removes a #${id} subscription`;
-  // }
+
+  async remove(subscriptionId: string) {
+    const subscription = await this.subscriptionModel.findOneAndDelete({
+      stripeSubscriptionId: subscriptionId,
+    });
+
+    if (!subscription) {
+      throw new NotFoundException(`Subscription is not found.`);
+    }
+
+    return subscription;
+  }
 }

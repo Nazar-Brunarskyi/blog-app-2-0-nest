@@ -73,7 +73,7 @@ export class StripeService {
           break;
         case 'customer.subscription.deleted':
           const subscriptionDeleted = event.data.object;
-          console.log(subscriptionDeleted);
+          await this.subscriptionService.remove(subscriptionDeleted.id);
           break;
         default:
           break;
