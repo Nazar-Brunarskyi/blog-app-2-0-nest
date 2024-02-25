@@ -27,7 +27,11 @@ export class SubscriptionService {
       validUntil: null,
     });
 
-    return newSubscription.save();
+    const savedSubscription = await newSubscription.save();
+
+    await this.userModel.findByIdAndUpdate(userId, { $set: { subscription: savedSubscription._id } });
+
+    return savedSubscription;
   }
 
   async updateSubscriptionValidity(subscriptionId: string, validUntil: Date) {

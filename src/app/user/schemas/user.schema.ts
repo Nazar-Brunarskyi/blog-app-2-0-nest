@@ -14,6 +14,9 @@ class User implements IUser {
 
   @Prop({ unique: true })
   email: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'Subscription' }) // This line sets up the reference
+  subscription: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

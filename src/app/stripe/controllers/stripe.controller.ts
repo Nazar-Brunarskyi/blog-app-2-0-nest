@@ -1,18 +1,18 @@
-import { Controller, Param, Post, RawBodyRequest, Req, UseGuards } from '@nestjs/common';
+import { Controller, Param, Post, RawBodyRequest, Req /*UseGuards*/ } from '@nestjs/common';
 import { StripeService } from '../services/stripe.service';
-import { FirebaseAuthInternalGuard } from '../../../common/guards';
-import { GetUser } from '../../../common/decorators/get-user-from-request.decorator';
-import { IUser } from '../../../common/types/interfaces/user';
+// import { FirebaseAuthInternalGuard } from '../../../common/guards';
+// import { GetUser } from '../../../common/decorators/get-user-from-request.decorator';
+// import { IUser } from '../../../common/types/interfaces/user';
 
 @Controller('stripe')
 export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
-  @Post('start-prime-subscription')
-  @UseGuards(FirebaseAuthInternalGuard)
-  createPremiumSubscription(@GetUser() user: IUser) {
-    return this.stripeService.createPremiumSubscription(user);
-  }
+  // @Post('start-prime-subscription')
+  // @UseGuards(FirebaseAuthInternalGuard)
+  // createPremiumSubscription(@GetUser() user: IUser) {
+  //   return this.stripeService.createPremiumSubscriptionSession(user);
+  // }
 
   @Post('webhooks')
   handleWebhookEvent(@Req() req: RawBodyRequest<Request>) {

@@ -24,7 +24,7 @@ export class StripeService {
     });
   }
 
-  async createPremiumSubscription(user: IUser) {
+  async createPremiumSubscriptionSession(user: IUser) {
     const session = await this.stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       customer_email: user.email,
@@ -42,7 +42,7 @@ export class StripeService {
       },
     });
 
-    return session.url;
+    return { url: session.url };
   }
 
   async handleStripeEvent(payload: Buffer, signature: string) {

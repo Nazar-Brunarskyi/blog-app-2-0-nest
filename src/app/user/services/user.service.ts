@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { User } from '../entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class UserService {
@@ -36,16 +37,20 @@ export class UserService {
   }
 
   findByFirebaseUid(firebaseId: string) {
-    return this.userModel.findOne({ firebaseId });
+    const today = DateTime.now().minus({ days: 15 }).toJSDate();
+
+    return this.userModel
+      .findOne({ firebaseId })
+      .populate({
+        path: 'subscription',
+        match: { validUntil: { $gt: today } },
+      })
+      .exec();
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+  findforFbGuard(firebaseId: string) {
+    return this.userModel.findOne({ firebaseId });
+  }
 
   async checkUserName(userName: string) {
     const existingUser = await this.userModel.findOne({ userName });
