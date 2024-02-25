@@ -22,7 +22,7 @@ export class FirebaseAuthInternalGuard implements CanActivate {
       const request = context.switchToHttp().getRequest();
       const firebaseUser = await this.firebaseAdminService.verifyIdToken(authToken);
 
-      const user = await this.userService.findByFirebaseUid(firebaseUser.uid);
+      const user = await this.userService.findforFbGuard(firebaseUser.uid);
 
       if (!user) {
         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
